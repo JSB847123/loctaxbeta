@@ -26,8 +26,17 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					light: 'hsl(var(--primary-light))',
+					dark: 'hsl(var(--primary-dark))'
 				},
+				'law-blue': {
+					DEFAULT: 'hsl(var(--law-blue))',
+					light: 'hsl(var(--law-blue-light))',
+					dark: 'hsl(var(--law-blue-dark))'
+				},
+				'law-accent': 'hsl(var(--law-accent))',
+				'law-background': 'hsl(var(--law-background))',
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
@@ -62,6 +71,16 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				}
+			},
+			backgroundImage: {
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-hero': 'var(--gradient-hero)', 
+				'gradient-card': 'var(--gradient-card)'
+			},
+			boxShadow: {
+				'card': 'var(--shadow-card)',
+				'elevated': 'var(--shadow-elevated)',
+				'button': 'var(--shadow-button)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
