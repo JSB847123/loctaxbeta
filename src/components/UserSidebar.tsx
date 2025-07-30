@@ -31,10 +31,10 @@ export function UserSidebar({
   return (
     <div className="space-y-6">
       {/* 최근 본 기사 */}
-      <Card className="bg-gradient-card border-law-blue/10">
+      <Card className="bg-gradient-card border-law-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Clock className="h-4 w-4 text-law-blue" />
+            <Clock className="h-4 w-4 text-law-primary" />
             최근 본 기사
           </CardTitle>
         </CardHeader>
@@ -43,7 +43,7 @@ export function UserSidebar({
             <p className="text-sm text-muted-foreground">최근 본 기사가 없습니다</p>
           ) : (
             recentItems.slice(0, 5).map((item) => (
-              <div 
+              <div
                 key={item.id}
                 className="p-3 bg-white/50 rounded-lg cursor-pointer hover:bg-white/80 transition-colors"
                 onClick={() => onItemClick(item)}
@@ -59,7 +59,7 @@ export function UserSidebar({
       </Card>
 
       {/* 즐겨찾는 기사 */}
-      <Card className="bg-gradient-card border-law-blue/10">
+      <Card className="bg-gradient-card border-law-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <Star className="h-4 w-4 text-yellow-500" />
@@ -87,10 +87,10 @@ export function UserSidebar({
       </Card>
 
       {/* 자주 방문하는 사이트 */}
-      <Card className="bg-gradient-card border-law-blue/10">
+      <Card className="bg-gradient-card border-law-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <Globe className="h-4 w-4 text-law-blue" />
+            <Globe className="h-4 w-4 text-law-primary" />
             자주 방문하는 사이트
           </CardTitle>
         </CardHeader>
@@ -113,10 +113,10 @@ export function UserSidebar({
       </Card>
 
       {/* 메모 섹션 */}
-      <Card className="bg-gradient-card border-law-blue/10">
+      <Card className="bg-gradient-card border-law-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
-            <StickyNote className="h-4 w-4 text-law-blue" />
+            <StickyNote className="h-4 w-4 text-law-primary" />
             메모
           </CardTitle>
         </CardHeader>
@@ -130,7 +130,7 @@ export function UserSidebar({
               </div>
             ))
           )}
-          <Button variant="outline" size="sm" className="w-full mt-2 border-law-blue/30">
+          <Button variant="outline" size="sm" className="w-full mt-2 border-law-border">
             메모 추가
           </Button>
         </CardContent>

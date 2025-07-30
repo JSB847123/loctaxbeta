@@ -102,16 +102,15 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-hero">
+    <div className="min-h-screen bg-law-background">
       {/* Header Section */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/5"></div>
+      <div className="relative overflow-hidden bg-gradient-hero">
         <div className="relative container mx-auto px-4 py-12 lg:py-20">
           <div className="text-center mb-8">
-            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-4">
+            <h1 className="text-4xl lg:text-6xl font-bold text-law-primary mb-4">
               법령 정보 포털
             </h1>
-            <p className="text-xl text-white/90 mb-8">
+            <p className="text-xl text-law-secondary mb-8">
               법령과 판례를 쉽고 빠르게 검색하세요
             </p>
           </div>

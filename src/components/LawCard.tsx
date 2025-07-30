@@ -23,17 +23,17 @@ export function LawCard({
   onToggleFavorite 
 }: LawCardProps) {
   return (
-    <Card className="group cursor-pointer hover:shadow-elevated transition-all duration-300 bg-gradient-card border-law-blue/10 hover:border-law-blue/30">
+    <Card className="group cursor-pointer hover:shadow-elevated transition-all duration-300 bg-gradient-card border-law-border hover:border-law-secondary/30">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
-              <BookOpen className="h-4 w-4 text-law-blue" />
-              <Badge variant="outline" className="text-xs border-law-blue/30 text-law-blue">
+              <BookOpen className="h-4 w-4 text-law-primary" />
+              <Badge variant="outline" className="text-xs border-law-border text-law-primary">
                 {category}
               </Badge>
             </div>
-            <CardTitle className="text-lg font-semibold text-foreground group-hover:text-law-blue transition-colors">
+            <CardTitle className="text-lg font-semibold text-foreground group-hover:text-law-primary transition-colors">
               {title}
             </CardTitle>
           </div>
@@ -44,7 +44,7 @@ export function LawCard({
               e.stopPropagation();
               onToggleFavorite?.();
             }}
-            className="shrink-0 hover:bg-law-blue/10"
+            className="shrink-0 hover:bg-law-accent"
           >
             <Star className={`h-4 w-4 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`} />
           </Button>
@@ -67,7 +67,7 @@ export function LawCard({
               e.stopPropagation();
               onClick?.();
             }}
-            className="text-law-blue hover:text-law-blue-dark hover:bg-law-blue/10"
+            className="text-law-primary hover:text-law-primary/80 hover:bg-law-accent"
           >
             자세히 보기
             <ExternalLink className="ml-1 h-3 w-3" />

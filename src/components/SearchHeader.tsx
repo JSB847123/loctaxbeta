@@ -41,12 +41,12 @@ export function SearchHeader({ onSearch, placeholder = "법령 또는 판례를 
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder={placeholder}
-          className="h-12 pl-12 pr-4 text-lg bg-white/95 backdrop-blur border-0 shadow-card rounded-full"
+          className="h-12 pl-12 pr-4 text-lg bg-white backdrop-blur border-law-border shadow-card rounded-full"
         />
         <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
         <Button
           onClick={handleSearch}
-          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-10 px-6 rounded-full shadow-button"
+          className="absolute right-1 top-1/2 transform -translate-y-1/2 h-10 px-6 rounded-full shadow-button bg-law-primary hover:bg-law-primary/90"
           variant="default"
         >
           검색
@@ -59,7 +59,7 @@ export function SearchHeader({ onSearch, placeholder = "법령 또는 판례를 
             <Badge
               key={index}
               variant="secondary"
-              className="px-3 py-1 bg-white/80 text-law-blue border-law-blue/20 hover:bg-white/90"
+              className="px-3 py-1 bg-white/90 text-law-primary border-law-border hover:bg-white"
             >
               {tag}
               <X

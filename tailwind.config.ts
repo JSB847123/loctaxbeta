@@ -30,13 +30,11 @@ export default {
 					light: 'hsl(var(--primary-light))',
 					dark: 'hsl(var(--primary-dark))'
 				},
-				'law-blue': {
-					DEFAULT: 'hsl(var(--law-blue))',
-					light: 'hsl(var(--law-blue-light))',
-					dark: 'hsl(var(--law-blue-dark))'
-				},
+				'law-primary': 'hsl(var(--law-primary))',
+				'law-secondary': 'hsl(var(--law-secondary))',
 				'law-accent': 'hsl(var(--law-accent))',
 				'law-background': 'hsl(var(--law-background))',
+				'law-border': 'hsl(var(--law-border))',
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))'
