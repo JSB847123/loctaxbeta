@@ -6,6 +6,8 @@ import { UserSidebar } from "@/components/UserSidebar";
 import { BasicLawLinks } from "@/components/BasicLawLinks";
 import { FAQ } from "@/components/FAQ";
 import { PropertyTaxCalculator } from "@/components/PropertyTaxCalculator";
+import { PropertyTaxLaws } from "@/components/PropertyTaxLaws";
+import { AcquisitionTaxLaws } from "@/components/AcquisitionTaxLaws";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -39,6 +41,8 @@ const Index = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [notes, setNotes] = useState(initialNotes);
   const [faqs, setFaqs] = useState<any[]>([]);
+  const [showPropertyTaxLaws, setShowPropertyTaxLaws] = useState(false);
+  const [showAcquisitionTaxLaws, setShowAcquisitionTaxLaws] = useState(false);
   const { toast } = useToast();
 
   const handleSearch = async (query: string) => {
@@ -62,7 +66,24 @@ const Index = () => {
         title: "외부 링크",
         description: "재산세 계산기 페이지로 이동합니다. (베타 버전)",
       });
-      // Here you would open external calculator
+      return;
+    }
+    
+    if (title === "재산세 관련법") {
+      setShowPropertyTaxLaws(true);
+      toast({
+        title: "재산세 관련법",
+        description: "재산세 관련 법령 목록을 표시합니다.",
+      });
+      return;
+    }
+    
+    if (title === "취득세 관련법") {
+      setShowAcquisitionTaxLaws(true);
+      toast({
+        title: "취득세 관련법",
+        description: "취득세 관련 법령 목록을 표시합니다.",
+      });
       return;
     }
     
@@ -71,6 +92,11 @@ const Index = () => {
       description: `${title} 관련 법령을 검색합니다.`,
     });
     handleSearch(title);
+  };
+
+  const handleBackToQuickLinks = () => {
+    setShowPropertyTaxLaws(false);
+    setShowAcquisitionTaxLaws(false);
   };
 
   const handleResultClick = (result: any) => {
@@ -120,10 +146,16 @@ const Index = () => {
           <div className="lg:col-span-3 space-y-8">
             {!hasSearched ? (
               <>
-                <div>
-                  <h2 className="text-2xl font-bold text-foreground mb-6">빠른 링크</h2>
-                  <QuickLinks onLinkClick={handleQuickLinkClick} />
-                </div>
+                {showPropertyTaxLaws ? (
+                  <PropertyTaxLaws onBack={handleBackToQuickLinks} />
+                ) : showAcquisitionTaxLaws ? (
+                  <AcquisitionTaxLaws onBack={handleBackToQuickLinks} />
+                ) : (
+                  <div>
+                    <h2 className="text-2xl font-bold text-foreground mb-6">빠른 링크</h2>
+                    <QuickLinks onLinkClick={handleQuickLinkClick} />
+                  </div>
+                )}
                 
                 {/* Mobile Calculator */}
                 <div className="lg:hidden">
