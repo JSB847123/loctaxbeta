@@ -4,7 +4,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Edit3, HelpCircle, Trash2, Check, X } from "lucide-react";
+import { Plus, Edit3, HelpCircle, Trash2, Check, X, Grid3X3, List } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface FAQItem {
@@ -51,6 +51,7 @@ export const FAQ = ({ faqs: initialFAQs = defaultFAQs, onFAQsChange }: FAQProps)
   const [newAnswer, setNewAnswer] = useState("");
   const [editQuestion, setEditQuestion] = useState("");
   const [editAnswer, setEditAnswer] = useState("");
+  const [viewMode, setViewMode] = useState<'card' | 'list'>('card');
   const { toast } = useToast();
 
   const updateFAQs = (newFAQs: FAQItem[]) => {
@@ -165,106 +166,201 @@ export const FAQ = ({ faqs: initialFAQs = defaultFAQs, onFAQsChange }: FAQProps)
             <HelpCircle className="h-5 w-5" />
             자주 묻는 질문
           </CardTitle>
-          {!isAdding && (
-            <Button 
-              variant="outline" 
+          <div className="flex items-center gap-2">
+            {/* 보기 모드 전환 버튼 */}
+            <Button
+              variant="ghost"
               size="sm"
-              onClick={() => setIsAdding(true)}
-              className="border-law-primary text-law-primary hover:bg-law-primary hover:text-white"
+              onClick={() => setViewMode(viewMode === 'card' ? 'list' : 'card')}
+              className="h-8 w-8 p-0"
+              title={viewMode === 'card' ? '리스트 보기' : '카드 보기'}
             >
-              <Plus className="h-4 w-4 mr-1" />
-              FAQ 추가
+              {viewMode === 'card' ? (
+                <List className="h-4 w-4" />
+              ) : (
+                <Grid3X3 className="h-4 w-4" />
+              )}
             </Button>
-          )}
+            {!isAdding && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setIsAdding(true)}
+                className="border-law-primary text-law-primary hover:bg-law-primary hover:text-white"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                FAQ 추가
+              </Button>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent>
-        <Accordion type="single" collapsible className="w-full">
-          {faqs.map((faq) => (
-            <AccordionItem key={faq.id} value={faq.id} className="border-b border-gray-200 group">
-              {editingId === faq.id ? (
-                <div className="py-4 space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">질문</label>
-                    <Input
-                      value={editQuestion}
-                      onChange={(e) => setEditQuestion(e.target.value)}
-                      placeholder="질문을 입력하세요..."
-                    />
+        {viewMode === 'card' ? (
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq) => (
+              <AccordionItem key={faq.id} value={faq.id} className="border-b border-gray-200 group">
+                {editingId === faq.id ? (
+                  <div className="py-4 space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">질문</label>
+                      <Input
+                        value={editQuestion}
+                        onChange={(e) => setEditQuestion(e.target.value)}
+                        placeholder="질문을 입력하세요..."
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">답변</label>
+                      <Textarea
+                        value={editAnswer}
+                        onChange={(e) => setEditAnswer(e.target.value)}
+                        placeholder="답변을 입력하세요..."
+                        className="min-h-[120px]"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEditFAQ(faq.id)}
+                        className="h-8 px-3"
+                      >
+                        <Check className="h-4 w-4 mr-1" />
+                        저장
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={cancelEditing}
+                        className="h-8 px-3"
+                      >
+                        <X className="h-4 w-4 mr-1" />
+                        취소
+                      </Button>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">답변</label>
-                    <Textarea
-                      value={editAnswer}
-                      onChange={(e) => setEditAnswer(e.target.value)}
-                      placeholder="답변을 입력하세요..."
-                      className="min-h-[120px]"
-                    />
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleEditFAQ(faq.id)}
-                      className="h-8 px-3"
-                    >
-                      <Check className="h-4 w-4 mr-1" />
-                      저장
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={cancelEditing}
-                      className="h-8 px-3"
-                    >
-                      <X className="h-4 w-4 mr-1" />
-                      취소
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <AccordionTrigger className="text-left hover:text-law-primary">
-                    <div className="flex items-center justify-between w-full pr-4">
-                      <span className="font-medium">{faq.question}</span>
-                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            startEditing(faq);
-                          }}
-                          className="h-6 w-6 p-0"
-                        >
-                          <Edit3 className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteFAQ(faq.id);
-                          }}
-                          className="h-6 w-6 p-0 text-red-500 hover:text-red-600"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
+                ) : (
+                  <>
+                    <AccordionTrigger className="text-left hover:text-law-primary">
+                      <div className="flex items-center justify-between w-full pr-4">
+                        <span className="font-medium">{faq.question}</span>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              startEditing(faq);
+                            }}
+                            className="h-6 w-6 p-0"
+                          >
+                            <Edit3 className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteFAQ(faq.id);
+                            }}
+                            className="h-6 w-6 p-0 text-red-500 hover:text-red-600"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
                       </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground">
+                      <div className="space-y-1">
+                        {formatAnswer(faq.answer)}
+                      </div>
+                    </AccordionContent>
+                  </>
+                )}
+              </AccordionItem>
+            ))}
+          </Accordion>
+        ) : (
+          <div className="space-y-2">
+            {faqs.map((faq) => (
+              <div key={faq.id} className="group">
+                {editingId === faq.id ? (
+                  <div className="p-4 border border-law-border rounded-lg space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">질문</label>
+                      <Input
+                        value={editQuestion}
+                        onChange={(e) => setEditQuestion(e.target.value)}
+                        placeholder="질문을 입력하세요..."
+                      />
                     </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">
-                    <div className="space-y-1">
-                      {formatAnswer(faq.answer)}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">답변</label>
+                      <Textarea
+                        value={editAnswer}
+                        onChange={(e) => setEditAnswer(e.target.value)}
+                        placeholder="답변을 입력하세요..."
+                        className="min-h-[120px]"
+                      />
                     </div>
-                  </AccordionContent>
-                </>
-              )}
-            </AccordionItem>
-          ))}
-          
-          {isAdding && (
-            <div className="py-4 space-y-4 border-b border-gray-200">
+                    <div className="flex gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEditFAQ(faq.id)}
+                        className="h-8 px-3"
+                      >
+                        <Check className="h-4 w-4 mr-1" />
+                        저장
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={cancelEditing}
+                        className="h-8 px-3"
+                      >
+                        <X className="h-4 w-4 mr-1" />
+                        취소
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between p-3 bg-white/50 rounded-lg border-l-4 border-law-primary/20 hover:bg-white/70 transition-colors">
+                    <div className="flex-1">
+                      <p className="font-medium text-sm text-law-primary mb-1">{faq.question}</p>
+                      <p className="text-xs text-muted-foreground truncate" title={faq.answer}>
+                        {faq.answer.split('\n')[0]}
+                      </p>
+                    </div>
+                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => startEditing(faq)}
+                        className="h-6 w-6 p-0"
+                      >
+                        <Edit3 className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteFAQ(faq.id)}
+                        className="h-6 w-6 p-0 text-red-500 hover:text-red-600"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {isAdding && (
+          <div className="mt-4">
+            <div className={viewMode === 'card' ? "py-4 space-y-4 border-b border-gray-200" : "p-4 border border-law-border rounded-lg space-y-4"}>
               <div className="space-y-2">
                 <label className="text-sm font-medium">질문</label>
                 <Input
@@ -304,8 +400,8 @@ export const FAQ = ({ faqs: initialFAQs = defaultFAQs, onFAQsChange }: FAQProps)
                 </Button>
               </div>
             </div>
-          )}
-        </Accordion>
+          </div>
+        )}
         
         {!isAdding && (
           <Button 

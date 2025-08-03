@@ -3,12 +3,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { StickyNote, Plus, Edit3, Trash2, Check, X, Globe, ExternalLink } from "lucide-react";
+import { StickyNote, Plus, Edit3, Trash2, Check, X, Globe, ExternalLink, Calendar, Grid3X3, List } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+interface MonthlySchedules {
+  [month: string]: string[];
+}
 
 interface UserSidebarProps {
   notes: string[];
   onNotesChange?: (notes: string[]) => void;
+  monthlySchedules?: MonthlySchedules;
+  onMonthlySchedulesChange?: (schedules: MonthlySchedules) => void;
 }
 
 const frequentSites = [
@@ -30,20 +36,43 @@ const frequentSites = [
   },
 ];
 
+const MONTHS = [
+  "1월", "2월", "3월", "4월", "5월", "6월",
+  "7월", "8월", "9월", "10월", "11월", "12월"
+];
+
 export function UserSidebar({ 
   notes: initialNotes = [],
-  onNotesChange
+  onNotesChange,
+  monthlySchedules: initialMonthlySchedules = {},
+  onMonthlySchedulesChange
 }: UserSidebarProps) {
   const [notes, setNotes] = useState<string[]>(initialNotes);
   const [isAdding, setIsAdding] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [newNote, setNewNote] = useState("");
   const [editNote, setEditNote] = useState("");
+  
+  // 메모 보기 모드 상태
+  const [noteViewMode, setNoteViewMode] = useState<'card' | 'list'>('card');
+  
+  // 월별 일정 상태
+  const [monthlySchedules, setMonthlySchedules] = useState<MonthlySchedules>(initialMonthlySchedules);
+  const [addingMonth, setAddingMonth] = useState<string | null>(null);
+  const [editingSchedule, setEditingSchedule] = useState<{month: string, index: number} | null>(null);
+  const [newSchedule, setNewSchedule] = useState("");
+  const [editSchedule, setEditSchedule] = useState("");
+  
   const { toast } = useToast();
 
   const updateNotes = (newNotes: string[]) => {
     setNotes(newNotes);
     onNotesChange?.(newNotes);
+  };
+
+  const updateMonthlySchedules = (newSchedules: MonthlySchedules) => {
+    setMonthlySchedules(newSchedules);
+    onMonthlySchedulesChange?.(newSchedules);
   };
 
   const handleAddNote = () => {
@@ -101,6 +130,66 @@ export function UserSidebar({
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  // 월별 일정 관리 함수들
+  const handleAddSchedule = (month: string) => {
+    if (newSchedule.trim()) {
+      const updatedSchedules = { ...monthlySchedules };
+      if (!updatedSchedules[month]) {
+        updatedSchedules[month] = [];
+      }
+      updatedSchedules[month] = [...updatedSchedules[month], newSchedule.trim()];
+      updateMonthlySchedules(updatedSchedules);
+      setNewSchedule("");
+      setAddingMonth(null);
+      toast({
+        title: "일정 추가됨",
+        description: `${month} 일정이 성공적으로 추가되었습니다.`,
+      });
+    }
+  };
+
+  const handleEditSchedule = (month: string, index: number) => {
+    if (editSchedule.trim()) {
+      const updatedSchedules = { ...monthlySchedules };
+      updatedSchedules[month][index] = editSchedule.trim();
+      updateMonthlySchedules(updatedSchedules);
+      setEditingSchedule(null);
+      setEditSchedule("");
+      toast({
+        title: "일정 수정됨",
+        description: `${month} 일정이 성공적으로 수정되었습니다.`,
+      });
+    }
+  };
+
+  const handleDeleteSchedule = (month: string, index: number) => {
+    const updatedSchedules = { ...monthlySchedules };
+    updatedSchedules[month] = updatedSchedules[month].filter((_, i) => i !== index);
+    if (updatedSchedules[month].length === 0) {
+      delete updatedSchedules[month];
+    }
+    updateMonthlySchedules(updatedSchedules);
+    toast({
+      title: "일정 삭제됨",
+      description: `${month} 일정이 성공적으로 삭제되었습니다.`,
+    });
+  };
+
+  const startEditingSchedule = (month: string, index: number) => {
+    setEditingSchedule({ month, index });
+    setEditSchedule(monthlySchedules[month][index]);
+  };
+
+  const cancelEditingSchedule = () => {
+    setEditingSchedule(null);
+    setEditSchedule("");
+  };
+
+  const cancelAddingSchedule = () => {
+    setAddingMonth(null);
+    setNewSchedule("");
+  };
+
   return (
     <div className="space-y-6">
       {/* 자주가는 사이트 섹션 */}
@@ -136,16 +225,32 @@ export function UserSidebar({
               <StickyNote className="h-4 w-4 text-law-primary" />
               메모
             </CardTitle>
-            {!isAdding && (
+            <div className="flex items-center gap-1">
+              {/* 보기 모드 전환 버튼 */}
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setIsAdding(true)}
+                onClick={() => setNoteViewMode(noteViewMode === 'card' ? 'list' : 'card')}
                 className="h-8 w-8 p-0"
+                title={noteViewMode === 'card' ? '리스트 보기' : '카드 보기'}
               >
-                <Plus className="h-4 w-4" />
+                {noteViewMode === 'card' ? (
+                  <List className="h-4 w-4" />
+                ) : (
+                  <Grid3X3 className="h-4 w-4" />
+                )}
               </Button>
-            )}
+              {!isAdding && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsAdding(true)}
+                  className="h-8 w-8 p-0"
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
           </div>
         </CardHeader>
         <CardContent className="pt-0 space-y-3">
@@ -182,7 +287,7 @@ export function UserSidebar({
                         </Button>
                       </div>
                     </div>
-                  ) : (
+                  ) : noteViewMode === 'card' ? (
                     <div className="p-3 bg-white/50 rounded-lg">
                       <p className="text-xs leading-relaxed mb-2">{note}</p>
                       <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -199,6 +304,30 @@ export function UserSidebar({
                           size="sm"
                           onClick={() => handleDeleteNote(index)}
                           className="h-6 px-2 text-red-500 hover:text-red-600"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between p-2 bg-white/30 rounded border-l-2 border-law-primary/30 hover:bg-white/50 transition-colors">
+                      <p className="text-xs leading-relaxed flex-1 truncate pr-2" title={note}>
+                        {note}
+                      </p>
+                      <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => startEditing(index)}
+                          className="h-5 w-5 p-0"
+                        >
+                          <Edit3 className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleDeleteNote(index)}
+                          className="h-5 w-5 p-0 text-red-500 hover:text-red-600"
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>
@@ -251,6 +380,126 @@ export function UserSidebar({
               메모 추가
             </Button>
           )}
+        </CardContent>
+      </Card>
+
+      {/* 월별 일정 섹션 */}
+      <Card className="bg-gradient-card border-law-border">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-law-primary" />
+            월별 일정
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0 space-y-4">
+          {MONTHS.map((month) => (
+            <div key={month} className="border border-law-border/30 rounded-lg p-3 bg-white/30">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-sm font-medium text-foreground">{month}</h4>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setAddingMonth(month)}
+                  className="h-6 w-6 p-0"
+                >
+                  <Plus className="h-3 w-3" />
+                </Button>
+              </div>
+              
+              <div className="space-y-2">
+                {monthlySchedules[month]?.map((schedule, index) => (
+                  <div key={index} className="group">
+                    {editingSchedule?.month === month && editingSchedule?.index === index ? (
+                      <div className="space-y-2">
+                        <Input
+                          value={editSchedule}
+                          onChange={(e) => setEditSchedule(e.target.value)}
+                          className="text-xs h-8"
+                          placeholder="일정을 입력하세요..."
+                        />
+                        <div className="flex gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleEditSchedule(month, index)}
+                            className="h-6 px-2"
+                          >
+                            <Check className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={cancelEditingSchedule}
+                            className="h-6 px-2"
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between p-2 bg-white/50 rounded text-xs">
+                        <span className="flex-1">{schedule}</span>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => startEditingSchedule(month, index)}
+                            className="h-5 w-5 p-0"
+                          >
+                            <Edit3 className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteSchedule(month, index)}
+                            className="h-5 w-5 p-0 text-red-500 hover:text-red-600"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {addingMonth === month && (
+                  <div className="space-y-2">
+                    <Input
+                      value={newSchedule}
+                      onChange={(e) => setNewSchedule(e.target.value)}
+                      className="text-xs h-8"
+                      placeholder="새 일정을 입력하세요..."
+                      autoFocus
+                    />
+                    <div className="flex gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleAddSchedule(month)}
+                        className="h-6 px-2"
+                      >
+                        <Check className="h-3 w-3" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={cancelAddingSchedule}
+                        className="h-6 px-2"
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {!monthlySchedules[month]?.length && addingMonth !== month && (
+                  <p className="text-xs text-muted-foreground text-center py-2">
+                    일정이 없습니다
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
         </CardContent>
       </Card>
     </div>

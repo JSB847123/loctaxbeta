@@ -11,6 +11,10 @@ import { AcquisitionTaxLaws } from "@/components/AcquisitionTaxLaws";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
+interface MonthlySchedules {
+  [month: string]: string[];
+}
+
 // Mock data for demonstration
 const mockSearchResults = [
   {
@@ -35,11 +39,18 @@ const initialNotes = [
   "지방세법 개정 내용 검토"
 ];
 
+const initialMonthlySchedules: MonthlySchedules = {
+  "3월": ["재산세 신고 준비", "부동산 시세 조사"],
+  "6월": ["재산세 납부 기한"],
+  "9월": ["재산세 2차 납부"]
+};
+
 const Index = () => {
   const [searchResults, setSearchResults] = useState(mockSearchResults);
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [notes, setNotes] = useState(initialNotes);
+  const [monthlySchedules, setMonthlySchedules] = useState<MonthlySchedules>(initialMonthlySchedules);
   const [faqs, setFaqs] = useState<any[]>([]);
   const [showPropertyTaxLaws, setShowPropertyTaxLaws] = useState(false);
   const [showAcquisitionTaxLaws, setShowAcquisitionTaxLaws] = useState(false);
@@ -69,6 +80,15 @@ const Index = () => {
       return;
     }
     
+    if (title === "취득세 관련법") {
+      setShowAcquisitionTaxLaws(true);
+      toast({
+        title: "취득세 관련법",
+        description: "취득세 관련 법령 목록을 표시합니다.",
+      });
+      return;
+    }
+    
     if (title === "재산세 관련법") {
       setShowPropertyTaxLaws(true);
       toast({
@@ -78,11 +98,10 @@ const Index = () => {
       return;
     }
     
-    if (title === "취득세 관련법") {
-      setShowAcquisitionTaxLaws(true);
+    if (title === "기타 관련법") {
       toast({
-        title: "취득세 관련법",
-        description: "취득세 관련 법령 목록을 표시합니다.",
+        title: "기타 관련법",
+        description: "기타 관련 법령 목록을 표시합니다. (준비 중)",
       });
       return;
     }
@@ -108,6 +127,10 @@ const Index = () => {
 
   const handleNotesChange = (newNotes: string[]) => {
     setNotes(newNotes);
+  };
+
+  const handleMonthlySchedulesChange = (newSchedules: MonthlySchedules) => {
+    setMonthlySchedules(newSchedules);
   };
 
   const handleFAQsChange = (newFAQs: any[]) => {
@@ -152,7 +175,7 @@ const Index = () => {
                   <AcquisitionTaxLaws onBack={handleBackToQuickLinks} />
                 ) : (
                   <div>
-                    <h2 className="text-2xl font-bold text-foreground mb-6">빠른 링크</h2>
+                    <h2 className="text-2xl font-bold text-foreground mb-6">관련법 모음</h2>
                     <QuickLinks onLinkClick={handleQuickLinkClick} />
                   </div>
                 )}
@@ -160,6 +183,11 @@ const Index = () => {
                 {/* Mobile Calculator */}
                 <div className="lg:hidden">
                   <PropertyTaxCalculator />
+                </div>
+                
+                {/* FAQ Section */}
+                <div className="mt-8">
+                  <FAQ faqs={faqs} onFAQsChange={handleFAQsChange} />
                 </div>
               </>
             ) : (
@@ -177,17 +205,14 @@ const Index = () => {
             <UserSidebar 
               notes={notes}
               onNotesChange={handleNotesChange}
+              monthlySchedules={monthlySchedules}
+              onMonthlySchedulesChange={handleMonthlySchedulesChange}
             />
           </div>
         </div>
       </div>
 
-      {/* FAQ Section at Bottom */}
-      <div className="bg-gray-50/80 py-12">
-        <div className="container mx-auto px-4">
-          <FAQ faqs={faqs} onFAQsChange={handleFAQsChange} />
-        </div>
-      </div>
+
     </div>
   );
 };

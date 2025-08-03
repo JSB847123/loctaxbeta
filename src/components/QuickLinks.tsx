@@ -13,6 +13,12 @@ const quickLinks = [
     description: "",
     icon: Gavel,
     category: ""
+  },
+  {
+    title: "기타 관련법",
+    description: "",
+    icon: FileText,
+    category: ""
   }
 ];
 
