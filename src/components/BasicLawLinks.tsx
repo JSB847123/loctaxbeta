@@ -14,6 +14,7 @@ const lawLinks = [
   { title: "지방세징수법", url: "https://law.go.kr/법령/지방세징수법" },
   { title: "지방세징수법 시행령", url: "https://law.go.kr/법령/지방세징수법 시행령" },
   { title: "지방세징수법 시행규칙", url: "https://law.go.kr/법령/지방세징수법 시행규칙" },
+  { title: "농어촌특별세법", url: "https://law.go.kr/법령/농어촌특별세법" },
 ];
 
 export const BasicLawLinks = () => {

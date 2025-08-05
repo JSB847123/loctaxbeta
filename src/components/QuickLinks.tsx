@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calculator, FileText, Gavel, TrendingUp } from "lucide-react";
+import { Calculator, FileText, Gavel, TrendingUp, Stamp } from "lucide-react";
 
 const quickLinks = [
   {
@@ -12,6 +12,12 @@ const quickLinks = [
     title: "재산세 관련법",
     description: "",
     icon: Gavel,
+    category: ""
+  },
+  {
+    title: "등록면허세 관련법",
+    description: "",
+    icon: Stamp,
     category: ""
   },
   {
@@ -28,7 +34,7 @@ interface QuickLinksProps {
 
 export function QuickLinks({ onLinkClick }: QuickLinksProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {quickLinks.map((link, index) => {
         const Icon = link.icon;
         return (

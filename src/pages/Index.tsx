@@ -9,6 +9,7 @@ import { PropertyTaxCalculator } from "@/components/PropertyTaxCalculator";
 import { PropertyTaxLaws } from "@/components/PropertyTaxLaws";
 import { AcquisitionTaxLaws } from "@/components/AcquisitionTaxLaws";
 import { Button } from "@/components/ui/button";
+import { FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface MonthlySchedules {
@@ -54,13 +55,35 @@ const Index = () => {
   const [faqs, setFaqs] = useState<any[]>([]);
   const [showPropertyTaxLaws, setShowPropertyTaxLaws] = useState(false);
   const [showAcquisitionTaxLaws, setShowAcquisitionTaxLaws] = useState(false);
+  const [showRegistrationTaxLaws, setShowRegistrationTaxLaws] = useState(false);
+  const [currentSearchQuery, setCurrentSearchQuery] = useState("");
   const { toast } = useToast();
 
   const handleSearch = async (query: string) => {
+    setCurrentSearchQuery(query);
     setIsSearching(true);
-    setHasSearched(true);
     
-    // Simulate API call
+    // 키워드가 있는 경우 PropertyTaxLaws에서 키워드 검색을 수행
+    if (query.trim()) {
+      setShowPropertyTaxLaws(true);
+      setShowAcquisitionTaxLaws(false);
+      setShowRegistrationTaxLaws(false);
+      setHasSearched(false); // PropertyTaxLaws를 표시하기 위해 false로 설정
+      setIsSearching(false);
+      toast({
+        title: "키워드 검색",
+        description: `"${query}" 키워드로 재산세 관련법에서 검색합니다.`,
+      });
+      return;
+    }
+    
+    // 일반 검색의 경우
+    setHasSearched(true);
+    setShowPropertyTaxLaws(false);
+    setShowAcquisitionTaxLaws(false);
+    setShowRegistrationTaxLaws(false);
+    
+    // Simulate API call for general search
     setTimeout(() => {
       setSearchResults(mockSearchResults);
       setIsSearching(false);
@@ -98,6 +121,15 @@ const Index = () => {
       return;
     }
     
+    if (title === "등록면허세 관련법") {
+      setShowRegistrationTaxLaws(true);
+      toast({
+        title: "등록면허세 관련법",
+        description: "등록면허세 관련 법령 목록을 표시합니다. (준비 중)",
+      });
+      return;
+    }
+    
     if (title === "기타 관련법") {
       toast({
         title: "기타 관련법",
@@ -116,6 +148,9 @@ const Index = () => {
   const handleBackToQuickLinks = () => {
     setShowPropertyTaxLaws(false);
     setShowAcquisitionTaxLaws(false);
+    setShowRegistrationTaxLaws(false);
+    setCurrentSearchQuery("");
+    setHasSearched(false);
   };
 
   const handleResultClick = (result: any) => {
@@ -167,18 +202,37 @@ const Index = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Main Content Area */}
           <div className="lg:col-span-3 space-y-8">
-            {!hasSearched ? (
+            {showPropertyTaxLaws ? (
+              <PropertyTaxLaws onBack={handleBackToQuickLinks} searchQuery={currentSearchQuery} />
+            ) : showAcquisitionTaxLaws ? (
+              <AcquisitionTaxLaws onBack={handleBackToQuickLinks} />
+            ) : showRegistrationTaxLaws ? (
+              <div className="text-center py-12">
+                <div className="w-16 h-16 bg-law-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FileText className="h-6 w-6 text-law-primary" />
+                </div>
+                <p className="text-lg font-medium text-foreground">등록면허세 관련법</p>
+                <p className="text-muted-foreground mt-2">준비 중입니다</p>
+                <button
+                  onClick={handleBackToQuickLinks}
+                  className="mt-4 px-4 py-2 bg-law-primary text-white rounded-lg hover:bg-law-primary/90 transition-colors"
+                >
+                  돌아가기
+                </button>
+              </div>
+            ) : hasSearched ? (
+              <SearchResults 
+                results={searchResults}
+                totalCount={searchResults.length}
+                onResultClick={handleResultClick}
+                isLoading={isSearching}
+              />
+            ) : (
               <>
-                {showPropertyTaxLaws ? (
-                  <PropertyTaxLaws onBack={handleBackToQuickLinks} />
-                ) : showAcquisitionTaxLaws ? (
-                  <AcquisitionTaxLaws onBack={handleBackToQuickLinks} />
-                ) : (
-                  <div>
-                    <h2 className="text-2xl font-bold text-foreground mb-6">관련법 모음</h2>
-                    <QuickLinks onLinkClick={handleQuickLinkClick} />
-                  </div>
-                )}
+                <div>
+                  <h2 className="text-2xl font-bold text-foreground mb-6">관련법 모음</h2>
+                  <QuickLinks onLinkClick={handleQuickLinkClick} />
+                </div>
                 
                 {/* Mobile Calculator */}
                 <div className="lg:hidden">
@@ -190,13 +244,6 @@ const Index = () => {
                   <FAQ faqs={faqs} onFAQsChange={handleFAQsChange} />
                 </div>
               </>
-            ) : (
-              <SearchResults 
-                results={searchResults}
-                totalCount={searchResults.length}
-                onResultClick={handleResultClick}
-                isLoading={isSearching}
-              />
             )}
           </div>
 
