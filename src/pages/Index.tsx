@@ -63,17 +63,27 @@ const Index = () => {
     setCurrentSearchQuery(query);
     setIsSearching(true);
     
-    // 키워드가 있는 경우 PropertyTaxLaws에서 키워드 검색을 수행
+    // 키워드가 있는 경우 현재 열려있는 관련법 페이지에서 검색하거나 기본적으로 재산세 관련법에서 검색
     if (query.trim()) {
-      setShowPropertyTaxLaws(true);
-      setShowAcquisitionTaxLaws(false);
-      setShowRegistrationTaxLaws(false);
-      setHasSearched(false); // PropertyTaxLaws를 표시하기 위해 false로 설정
+      if (!showPropertyTaxLaws && !showAcquisitionTaxLaws) {
+        // 아무 관련법 페이지도 열려있지 않으면 재산세 관련법을 기본으로 표시
+        setShowPropertyTaxLaws(true);
+        setShowAcquisitionTaxLaws(false);
+        setShowRegistrationTaxLaws(false);
+        toast({
+          title: "키워드 검색",
+          description: `"${query}" 키워드로 재산세 관련법에서 검색합니다.`,
+        });
+      } else {
+        // 이미 관련법 페이지가 열려있으면 해당 페이지에서 검색
+        const lawType = showPropertyTaxLaws ? "재산세" : showAcquisitionTaxLaws ? "취득세" : "등록면허세";
+        toast({
+          title: "키워드 검색",
+          description: `"${query}" 키워드로 ${lawType} 관련법에서 검색합니다.`,
+        });
+      }
+      setHasSearched(false); // 관련법 페이지를 표시하기 위해 false로 설정
       setIsSearching(false);
-      toast({
-        title: "키워드 검색",
-        description: `"${query}" 키워드로 재산세 관련법에서 검색합니다.`,
-      });
       return;
     }
     
@@ -205,7 +215,7 @@ const Index = () => {
             {showPropertyTaxLaws ? (
               <PropertyTaxLaws onBack={handleBackToQuickLinks} searchQuery={currentSearchQuery} />
             ) : showAcquisitionTaxLaws ? (
-              <AcquisitionTaxLaws onBack={handleBackToQuickLinks} />
+              <AcquisitionTaxLaws onBack={handleBackToQuickLinks} searchQuery={currentSearchQuery} />
             ) : showRegistrationTaxLaws ? (
               <div className="text-center py-12">
                 <div className="w-16 h-16 bg-law-accent rounded-full flex items-center justify-center mx-auto mb-4">
