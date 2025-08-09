@@ -1,0 +1,271 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ExternalLink, ArrowLeft, Book } from "lucide-react";
+
+// Import law data
+import { localTaxActDecree, localTaxActRule } from "@/data/acquisitionTaxLawsData1";
+import { specialLocalTaxRestrictionAct } from "@/data/acquisitionTaxLawsData2";
+import { specialLocalTaxRestrictionActDecree, specialLocalTaxRestrictionActRule } from "@/data/acquisitionTaxLawsData3";
+
+interface LawItem {
+  title: string;
+  url: string;
+  keywords: string[];
+}
+
+interface LawSection {
+  title: string;
+  laws: LawItem[];
+}
+
+// 지방세법 데이터
+const localTaxAct: LawSection[] = [
+  {
+    title: "지방세법 - 통칙",
+    laws: [
+      {
+        title: "지방세법 제6조(정의)",
+        url: "https://www.law.go.kr/법령/지방세법/제6조",
+        keywords: ["취득세", "용어", "정의", "취득", "부동산"]
+      },
+      {
+        title: "지방세법 제7조(납세의무자 등)",
+        url: "https://www.law.go.kr/법령/지방세법/제7조",
+        keywords: ["취득세", "납세의무자", "취득", "부동산등", "소유자"]
+      },
+      {
+        title: "지방세법 제8조(납세지)",
+        url: "https://www.law.go.kr/법령/지방세법/제8조",
+        keywords: ["취득세", "납세지", "부동산", "소재지", "차량"]
+      },
+      {
+        title: "지방세법 제9조(비과세)",
+        url: "https://www.law.go.kr/법령/지방세법/제9조",
+        keywords: ["취득세", "비과세", "국가", "지방자치단체", "신탁"]
+      }
+    ]
+  },
+  {
+    title: "지방세법 - 과세표준과 세율",
+    laws: [
+      {
+        title: "지방세법 제10조(과세표준의 기준)",
+        url: "https://www.law.go.kr/법령/지방세법/제10조",
+        keywords: ["취득세", "과세표준", "기준", "취득당시가액", "연부금액"]
+      },
+      {
+        title: "지방세법 제10조의2(무상취득의 경우 과세표준)",
+        url: "https://www.law.go.kr/법령/지방세법/제10조의2",
+        keywords: ["취득세", "무상취득", "과세표준", "시가인정액", "시가표준액"]
+      },
+      {
+        title: "지방세법 제10조의3(유상승계취득의 경우 과세표준)",
+        url: "https://www.law.go.kr/법령/지방세법/제10조의3",
+        keywords: ["취득세", "유상승계취득", "과세표준", "사실상취득가격", "시가인정액"]
+      },
+      {
+        title: "지방세법 제10조의4(원시취득의 경우 과세표준)",
+        url: "https://www.law.go.kr/법령/지방세법/제10조의4",
+        keywords: ["취득세", "원시취득", "과세표준", "사실상취득가격", "시가표준액"]
+      },
+      {
+        title: "지방세법 제10조의5(무상취득ㆍ유상승계취득·원시취득의 경우 과세표준에 대한 특례)",
+        url: "https://www.law.go.kr/법령/지방세법/제10조의5",
+        keywords: ["취득세", "과세표준", "특례", "차량", "기계장비"]
+      },
+      {
+        title: "지방세법 제10조의6(취득으로 보는 경우의 과세표준)",
+        url: "https://www.law.go.kr/법령/지방세법/제10조의6",
+        keywords: ["취득세", "과세표준", "지목변경", "과점주주", "증가가액"]
+      },
+      {
+        title: "지방세법 제10조의7(취득의 시기)",
+        url: "https://www.law.go.kr/법령/지방세법/제10조의7",
+        keywords: ["취득세", "취득시기", "취득유형별", "대통령령", "규정"]
+      },
+      {
+        title: "지방세법 제11조(부동산 취득의 세율)",
+        url: "https://www.law.go.kr/법령/지방세법/제11조",
+        keywords: ["부동산", "취득", "세율", "상속", "무상취득"]
+      },
+      {
+        title: "지방세법 제12조(부동산 외 취득의 세율)",
+        url: "https://www.law.go.kr/법령/지방세법/제12조",
+        keywords: ["부동산외", "취득", "세율", "선박", "차량"]
+      },
+      {
+        title: "지방세법 제13조(과밀억제권역 안 취득 등 중과)",
+        url: "https://www.law.go.kr/법령/지방세법/제13조",
+        keywords: ["과밀억제권역", "취득", "중과", "본점", "공장"]
+      },
+      {
+        title: "지방세법 제13조의2(법인의 주택 취득 등 중과)",
+        url: "https://www.law.go.kr/법령/지방세법/제13조의2",
+        keywords: ["법인", "주택취득", "중과", "1세대2주택", "조정대상지역"]
+      },
+      {
+        title: "지방세법 제13조의3(주택 수의 판단 범위)",
+        url: "https://www.law.go.kr/법령/지방세법/제13조의3",
+        keywords: ["주택수", "판단범위", "신탁", "조합원입주권", "주택분양권"]
+      },
+      {
+        title: "지방세법 제14조(조례에 따른 세율 조정)",
+        url: "https://www.law.go.kr/법령/지방세법/제14조",
+        keywords: ["세율조정", "조례", "지방자치단체", "100분의50", "가감"]
+      },
+      {
+        title: "지방세법 제15조(세율의 특례)",
+        url: "https://www.law.go.kr/법령/지방세법/제15조",
+        keywords: ["세율", "특례", "환매등기", "상속", "법인합병"]
+      },
+      {
+        title: "지방세법 제16조(세율 적용)",
+        url: "https://www.law.go.kr/법령/지방세법/제16조",
+        keywords: ["세율적용", "토지", "건축물", "취득", "추징"]
+      },
+      {
+        title: "지방세법 제17조(면세점)",
+        url: "https://www.law.go.kr/법령/지방세법/제17조",
+        keywords: ["취득세", "면세점", "취득가액", "50만원", "부과"]
+      }
+    ]
+  },
+  {
+    title: "지방세법 - 부과ㆍ징수",
+    laws: [
+      {
+        title: "지방세법 제18조(징수방법)",
+        url: "https://www.law.go.kr/법령/지방세법/제18조",
+        keywords: ["취득세", "징수방법", "신고납부", "규정", "방법"]
+      },
+      {
+        title: "지방세법 제19조(통보 등)",
+        url: "https://www.law.go.kr/법령/지방세법/제19조",
+        keywords: ["취득세", "과세물건", "매각", "통보", "신고"]
+      },
+      {
+        title: "지방세법 제20조(신고 및 납부)",
+        url: "https://www.law.go.kr/법령/지방세법/제20조",
+        keywords: ["취득세", "신고", "납부", "취득일", "과세표준"]
+      },
+      {
+        title: "지방세법 제21조(부족세액의 추징 및 가산세)",
+        url: "https://www.law.go.kr/법령/지방세법/제21조",
+        keywords: ["취득세", "부족세액", "추징", "가산세", "신고의무"]
+      },
+      {
+        title: "지방세법 제22조(등기자료의 통보)",
+        url: "https://www.law.go.kr/법령/지방세법/제22조",
+        keywords: ["등기자료", "통보", "등기등록관서", "납세지", "지방자치단체"]
+      },
+      {
+        title: "지방세법 제22조의2(장부 등의 작성과 보존)",
+        url: "https://www.law.go.kr/법령/지방세법/제22조의2",
+        keywords: ["장부", "작성", "보존", "취득당시가액", "증거서류"]
+      },
+      {
+        title: "지방세법 제22조의3(가족관계등록 전산정보 등의 공동이용)",
+        url: "https://www.law.go.kr/법령/지방세법/제22조의3",
+        keywords: ["가족관계등록", "전산정보", "공동이용", "주택소유관계", "확인"]
+      },
+      {
+        title: "지방세법 제22조의4(증여세 관련 자료의 통보)",
+        url: "https://www.law.go.kr/법령/지방세법/제22조의4",
+        keywords: ["증여세", "관련자료", "통보", "부동산", "부과징수"]
+      }
+    ]
+  }
+];
+
+// Combine all data
+const acquisitionTaxLaws: LawSection[] = [
+  ...localTaxAct,
+  ...localTaxActDecree,
+  localTaxActRule,
+  ...specialLocalTaxRestrictionAct,
+  ...specialLocalTaxRestrictionActDecree,
+  specialLocalTaxRestrictionActRule
+];
+
+interface AcquisitionTaxLawsProps {
+  onBack: () => void;
+}
+
+export const AcquisitionTaxLaws = ({ onBack }: AcquisitionTaxLawsProps) => {
+  const handleLawClick = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  return (
+    <Card className="bg-white/80 backdrop-blur shadow-card">
+      <CardHeader>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onBack}
+            className="p-2"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <CardTitle className="text-xl font-bold text-law-primary flex items-center gap-2">
+            <Book className="h-5 w-5" />
+            취득세 관련법
+          </CardTitle>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-6 max-h-[70vh] overflow-y-auto">
+        {acquisitionTaxLaws.map((section, sectionIndex) => (
+          <div key={sectionIndex}>
+            <h3 className="font-semibold text-lg text-law-primary mb-3 border-b border-law-accent/30 pb-2">
+              {section.title}
+            </h3>
+            <div className="grid grid-cols-1 gap-3">
+              {section.laws.map((law, lawIndex) => (
+                <div
+                  key={lawIndex}
+                  className="p-3 border rounded-lg hover:bg-law-accent/10 hover:border-law-primary transition-colors duration-200 group"
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <button
+                      onClick={() => handleLawClick(law.url)}
+                      className="text-left flex-1"
+                    >
+                      <span className="text-sm font-medium text-foreground group-hover:text-law-primary block">
+                        {law.title}
+                      </span>
+                    </button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleLawClick(law.url)}
+                      className="h-6 w-6 p-0 opacity-50 group-hover:opacity-100 transition-opacity ml-2"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                    </Button>
+                  </div>
+                  {law.keywords.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {law.keywords.map((keyword, keywordIndex) => (
+                        <Badge 
+                          key={keywordIndex} 
+                          variant="outline" 
+                          className="text-xs px-2 py-0.5 text-law-secondary border-law-secondary/30"
+                        >
+                          {keyword}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </CardContent>
+    </Card>
+  );
+};
+
+// Component is already exported above
