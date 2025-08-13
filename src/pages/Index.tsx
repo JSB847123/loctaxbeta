@@ -9,6 +9,7 @@ import { PropertyTaxCalculator } from "@/components/PropertyTaxCalculator";
 import { PropertyTaxLaws } from "@/components/PropertyTaxLaws";
 import { AcquisitionTaxLaws } from "@/components/AcquisitionTaxLaws";
 import { RegistrationTaxLaws } from "@/components/RegistrationTaxLaws";
+import { CustomLaws } from "@/components/CustomLaws";
 import { Button } from "@/components/ui/button";
 import { FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -57,6 +58,7 @@ const Index = () => {
   const [showPropertyTaxLaws, setShowPropertyTaxLaws] = useState(false);
   const [showAcquisitionTaxLaws, setShowAcquisitionTaxLaws] = useState(false);
   const [showRegistrationTaxLaws, setShowRegistrationTaxLaws] = useState(false);
+  const [showCustomLaws, setShowCustomLaws] = useState(false);
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
   const { toast } = useToast();
 
@@ -141,10 +143,11 @@ const Index = () => {
       return;
     }
     
-    if (title === "기타 관련법") {
+    if (title === "내가 정리한 관련 법") {
+      setShowCustomLaws(true);
       toast({
-        title: "기타 관련법",
-        description: "기타 관련 법령 목록을 표시합니다. (준비 중)",
+        title: "내가 정리한 관련 법",
+        description: "나만의 법령 목록을 관리합니다.",
       });
       return;
     }
@@ -160,6 +163,7 @@ const Index = () => {
     setShowPropertyTaxLaws(false);
     setShowAcquisitionTaxLaws(false);
     setShowRegistrationTaxLaws(false);
+    setShowCustomLaws(false);
     setCurrentSearchQuery("");
     setHasSearched(false);
   };
@@ -219,6 +223,8 @@ const Index = () => {
               <AcquisitionTaxLaws onBack={handleBackToQuickLinks} searchQuery={currentSearchQuery} />
             ) : showRegistrationTaxLaws ? (
               <RegistrationTaxLaws onBack={handleBackToQuickLinks} searchQuery={currentSearchQuery} />
+            ) : showCustomLaws ? (
+              <CustomLaws onBack={handleBackToQuickLinks} />
             ) : hasSearched ? (
               <SearchResults 
                 results={searchResults}

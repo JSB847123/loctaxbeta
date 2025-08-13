@@ -21,7 +21,7 @@ const quickLinks = [
     category: ""
   },
   {
-    title: "기타 관련법",
+    title: "내가 정리한 관련 법",
     description: "",
     icon: FileText,
     category: ""
