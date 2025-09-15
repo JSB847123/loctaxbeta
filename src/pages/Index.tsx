@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SearchHeader } from "@/components/SearchHeader";
 import { QuickLinks } from "@/components/QuickLinks";
 import { SearchResults } from "@/components/SearchResults";
@@ -17,6 +17,49 @@ import { useToast } from "@/hooks/use-toast";
 interface MonthlySchedules {
   [month: string]: string[];
 }
+
+interface StoredData {
+  data: any;
+  timestamp: number;
+}
+
+// 2년(24개월) = 2 * 365 * 24 * 60 * 60 * 1000 ms
+const TWO_YEARS_IN_MS = 2 * 365 * 24 * 60 * 60 * 1000;
+
+// localStorage에서 데이터를 불러오는 함수 (2년 기한 체크)
+const loadFromLocalStorage = (key: string, defaultValue: any) => {
+  try {
+    const stored = localStorage.getItem(key);
+    if (!stored) return defaultValue;
+    
+    const parsedData: StoredData = JSON.parse(stored);
+    const now = Date.now();
+    
+    // 2년이 지났는지 확인
+    if (now - parsedData.timestamp > TWO_YEARS_IN_MS) {
+      localStorage.removeItem(key);
+      return defaultValue;
+    }
+    
+    return parsedData.data;
+  } catch (error) {
+    console.error(`Failed to load ${key} from localStorage:`, error);
+    return defaultValue;
+  }
+};
+
+// localStorage에 데이터를 저장하는 함수 (타임스탬프 포함)
+const saveToLocalStorage = (key: string, data: any) => {
+  try {
+    const dataToStore: StoredData = {
+      data,
+      timestamp: Date.now()
+    };
+    localStorage.setItem(key, JSON.stringify(dataToStore));
+  } catch (error) {
+    console.error(`Failed to save ${key} to localStorage:`, error);
+  }
+};
 
 // Mock data for demonstration
 const mockSearchResults = [
@@ -52,8 +95,8 @@ const Index = () => {
   const [searchResults, setSearchResults] = useState(mockSearchResults);
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
-  const [notes, setNotes] = useState(initialNotes);
-  const [monthlySchedules, setMonthlySchedules] = useState<MonthlySchedules>(initialMonthlySchedules);
+  const [notes, setNotes] = useState<string[]>([]);
+  const [monthlySchedules, setMonthlySchedules] = useState<MonthlySchedules>({});
   const [faqs, setFaqs] = useState<any[]>([]);
   const [showPropertyTaxLaws, setShowPropertyTaxLaws] = useState(false);
   const [showAcquisitionTaxLaws, setShowAcquisitionTaxLaws] = useState(false);
@@ -61,6 +104,15 @@ const Index = () => {
   const [showCustomLaws, setShowCustomLaws] = useState(false);
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
   const { toast } = useToast();
+
+  // localStorage에서 메모와 월별 일정 불러오기
+  useEffect(() => {
+    const savedNotes = loadFromLocalStorage('userNotes', initialNotes);
+    const savedSchedules = loadFromLocalStorage('monthlySchedules', initialMonthlySchedules);
+    
+    setNotes(savedNotes);
+    setMonthlySchedules(savedSchedules);
+  }, []);
 
   const handleSearch = async (query: string) => {
     setCurrentSearchQuery(query);
@@ -177,10 +229,12 @@ const Index = () => {
 
   const handleNotesChange = (newNotes: string[]) => {
     setNotes(newNotes);
+    saveToLocalStorage('userNotes', newNotes);
   };
 
   const handleMonthlySchedulesChange = (newSchedules: MonthlySchedules) => {
     setMonthlySchedules(newSchedules);
+    saveToLocalStorage('monthlySchedules', newSchedules);
   };
 
   const handleFAQsChange = (newFAQs: any[]) => {
