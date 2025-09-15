@@ -40,12 +40,12 @@ export function QuickLinks({ onLinkClick }: QuickLinksProps) {
         return (
           <Card 
             key={index}
-            className="group cursor-pointer hover:shadow-elevated transition-all duration-300 bg-gradient-card border-law-border hover:border-law-secondary/30"
+            className="group cursor-pointer hover:shadow-elevated transition-all duration-300 bg-card/80 backdrop-blur border-border hover:border-law-primary/30"
             onClick={() => onLinkClick(link.title, link.isExternal)}
           >
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
-                <div className="p-2 bg-law-accent rounded-lg group-hover:bg-law-accent/80 transition-colors">
+                <div className="p-2 bg-accent rounded-lg group-hover:bg-accent/80 transition-colors">
                   <Icon className="h-4 w-4 text-law-primary" />
                 </div>
                 {link.category && (

@@ -23,7 +23,7 @@ export const BasicLawLinks = () => {
   };
 
   return (
-    <Card className="bg-white/80 backdrop-blur shadow-card">
+    <Card className="bg-card/80 backdrop-blur shadow-card border-law-border">
       <CardHeader>
         <CardTitle className="text-xl font-bold text-law-primary flex items-center gap-2">
           <ExternalLink className="h-5 w-5" />
@@ -36,7 +36,7 @@ export const BasicLawLinks = () => {
             <button
               key={index}
               onClick={() => handleLinkClick(law.url)}
-              className="p-3 text-left border rounded-lg hover:bg-law-accent/10 hover:border-law-primary transition-colors duration-200 group"
+              className="p-3 text-left border border-border rounded-lg hover:bg-accent hover:border-law-primary transition-colors duration-200 group bg-card/50"
             >
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-foreground group-hover:text-law-primary">

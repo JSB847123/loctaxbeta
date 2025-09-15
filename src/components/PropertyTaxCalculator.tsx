@@ -24,7 +24,7 @@ export const PropertyTaxCalculator = () => {
 
   return (
     <div className="space-y-4">
-      <Card className="bg-white/90 backdrop-blur shadow-card border-law-primary/20">
+      <Card className="bg-card/90 backdrop-blur shadow-card border-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg font-bold text-law-primary flex items-center gap-2">
             <Calculator className="h-5 w-5" />
@@ -34,14 +34,14 @@ export const PropertyTaxCalculator = () => {
         <CardContent>
           <Button 
             onClick={handleHouseCalculatorClick}
-            className="w-full bg-law-primary hover:bg-law-primary/90 text-white"
+            className="w-full bg-law-primary hover:bg-law-primary/90 text-primary-foreground"
           >
             계산기 실행
           </Button>
         </CardContent>
       </Card>
       
-      <Card className="bg-white/90 backdrop-blur shadow-card border-law-primary/20">
+      <Card className="bg-card/90 backdrop-blur shadow-card border-border">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg font-bold text-law-primary flex items-center gap-2">
             <Calculator className="h-5 w-5" />
@@ -51,7 +51,7 @@ export const PropertyTaxCalculator = () => {
         <CardContent>
           <Button 
             onClick={handleLandCalculatorClick}
-            className="w-full bg-law-primary hover:bg-law-primary/90 text-white"
+            className="w-full bg-law-primary hover:bg-law-primary/90 text-primary-foreground"
           >
             계산기 실행
           </Button>

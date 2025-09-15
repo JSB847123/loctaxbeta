@@ -56,7 +56,7 @@ export function SearchResults({ results, totalCount, onResultClick, isLoading = 
         {results.map((result) => (
           <Card 
             key={result.id}
-            className="group cursor-pointer hover:shadow-elevated transition-all duration-300 bg-gradient-card border-law-border hover:border-law-secondary/30"
+            className="group cursor-pointer hover:shadow-elevated transition-all duration-300 bg-card/80 backdrop-blur border-border hover:border-law-primary/30"
             onClick={() => onResultClick(result)}
           >
             <CardHeader className="pb-3">

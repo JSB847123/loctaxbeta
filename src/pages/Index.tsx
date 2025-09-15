@@ -10,6 +10,7 @@ import { PropertyTaxLaws } from "@/components/PropertyTaxLaws";
 import { AcquisitionTaxLaws } from "@/components/AcquisitionTaxLaws";
 import { RegistrationTaxLaws } from "@/components/RegistrationTaxLaws";
 import { CustomLaws } from "@/components/CustomLaws";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -252,9 +253,14 @@ const Index = () => {
         
         <div className="relative container mx-auto px-4 py-12 lg:py-20">
           <div className="text-center mb-8">
-            <h1 className="text-4xl lg:text-6xl font-bold text-law-primary mb-8">
-              취득세, 재산세 법령 정보 모음
-            </h1>
+            <div className="flex items-center justify-center gap-6">
+              <h1 className="text-4xl lg:text-6xl font-bold text-law-primary">
+                취득세, 재산세 법령 정보 모음
+              </h1>
+              <div className="flex-shrink-0">
+                <ThemeToggle />
+              </div>
+            </div>
           </div>
           
           <SearchHeader onSearch={handleSearch} />

@@ -159,7 +159,7 @@ export const FAQ = ({ faqs: initialFAQs = defaultFAQs, onFAQsChange }: FAQProps)
   };
 
   return (
-    <Card className="bg-white/80 backdrop-blur shadow-card">
+    <Card className="bg-card/80 backdrop-blur shadow-card border-border">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-xl font-bold text-law-primary flex items-center gap-2">
@@ -186,7 +186,7 @@ export const FAQ = ({ faqs: initialFAQs = defaultFAQs, onFAQsChange }: FAQProps)
                 variant="outline" 
                 size="sm"
                 onClick={() => setIsAdding(true)}
-                className="border-law-primary text-law-primary hover:bg-law-primary hover:text-white"
+                className="border-law-primary text-law-primary hover:bg-law-primary hover:text-primary-foreground"
               >
                 <Plus className="h-4 w-4 mr-1" />
                 FAQ 추가
@@ -199,7 +199,7 @@ export const FAQ = ({ faqs: initialFAQs = defaultFAQs, onFAQsChange }: FAQProps)
         {viewMode === 'card' ? (
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq) => (
-              <AccordionItem key={faq.id} value={faq.id} className="border-b border-gray-200 group">
+              <AccordionItem key={faq.id} value={faq.id} className="border-b border-border group">
                 {editingId === faq.id ? (
                   <div className="py-4 space-y-4">
                     <div className="space-y-2">
@@ -286,7 +286,7 @@ export const FAQ = ({ faqs: initialFAQs = defaultFAQs, onFAQsChange }: FAQProps)
             {faqs.map((faq) => (
               <div key={faq.id} className="group">
                 {editingId === faq.id ? (
-                  <div className="p-4 border border-law-border rounded-lg space-y-4">
+                  <div className="p-4 border border-border rounded-lg space-y-4 bg-card/30">
                     <div className="space-y-2">
                       <label className="text-sm font-medium">질문</label>
                       <Input
@@ -326,7 +326,7 @@ export const FAQ = ({ faqs: initialFAQs = defaultFAQs, onFAQsChange }: FAQProps)
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-between p-3 bg-white/50 rounded-lg border-l-4 border-law-primary/20 hover:bg-white/70 transition-colors">
+                  <div className="flex items-center justify-between p-3 bg-card/50 rounded-lg border-l-4 border-law-primary/20 hover:bg-accent/50 transition-colors">
                     <div className="flex-1">
                       <p className="font-medium text-sm text-law-primary mb-1">{faq.question}</p>
                       <p className="text-xs text-muted-foreground truncate" title={faq.answer}>
@@ -360,7 +360,7 @@ export const FAQ = ({ faqs: initialFAQs = defaultFAQs, onFAQsChange }: FAQProps)
         
         {isAdding && (
           <div className="mt-4">
-            <div className={viewMode === 'card' ? "py-4 space-y-4 border-b border-gray-200" : "p-4 border border-law-border rounded-lg space-y-4"}>
+            <div className={viewMode === 'card' ? "py-4 space-y-4 border-b border-border bg-card/30 rounded-lg px-4" : "p-4 border border-border rounded-lg space-y-4 bg-card/30"}>
               <div className="space-y-2">
                 <label className="text-sm font-medium">질문</label>
                 <Input
@@ -407,7 +407,7 @@ export const FAQ = ({ faqs: initialFAQs = defaultFAQs, onFAQsChange }: FAQProps)
           <Button 
             variant="outline" 
             size="sm" 
-            className="w-full mt-4 border-law-border"
+            className="w-full mt-4 border-border hover:bg-accent"
             onClick={() => setIsAdding(true)}
           >
             <Plus className="h-4 w-4 mr-2" />
